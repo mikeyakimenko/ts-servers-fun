@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["es2015", "es2016", "DOM"],
+    "outDir": "./dist/",
+    "module": "es6",
+    "target": "es5",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+],
+  "compileOnSave": true,
+  "allowJs": true
+}
