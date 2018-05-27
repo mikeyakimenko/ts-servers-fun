@@ -1,6 +1,9 @@
 export class ServersListPopup {
     private id: string
-    private data: object
+    private data: {
+        serversList: any[],
+        callbacks: any
+    }
     private container: HTMLHtmlElement
 
     constructor(id, data) {
@@ -13,7 +16,19 @@ export class ServersListPopup {
         return new ServersListPopup(id, data)
     }
 
-    private render (data) {
+    private addListeners() {
+        let element = document.querySelector(`#ui-${this.id}`)
+        let elementItems = Array.from(element.querySelectorAll('#ui-server'))
+        elementItems.forEach(item => {
+            let trigger = item.querySelector('.link')
+            let serverId = trigger.getAttribute('data-id')
+            trigger.addEventListener('click', e => {
+                this.data.callbacks.serverNameClick(serverId)
+            }, false)
+        })
+    }
+
+    private render(data): string {
         return `
             <style>
                 .popup {
@@ -65,9 +80,9 @@ export class ServersListPopup {
             </style>
             <div id="ui-${this.id}" class="popup">
                 <ul class="items">
-                ${data.serversList.map(item => {
-                    return `<li class="item">
-                                <span class="link">${item.serverName}</span>
+                ${data.serversList.map((item, index) => {
+                    return `<li id="ui-server" class="item">
+                                <span class="link" data-id="${item.id}">${item.serverName}</span>
                                 <div>server id: ${item.id}</div>
                                 <div>server group: ${item.serverGroup}</div>
                                 <div>server rate: ${item.rate}</div>
@@ -79,8 +94,9 @@ export class ServersListPopup {
         `
     }
 
-    public createElement() {
+    public createElement(): void {
         let element = document.createRange().createContextualFragment(this.render(this.data))
         this.container.appendChild(element)
+        this.addListeners()
     }
 }

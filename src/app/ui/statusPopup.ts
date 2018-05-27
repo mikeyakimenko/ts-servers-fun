@@ -14,7 +14,6 @@ export class StatusPopup {
             <style>
                 .statusPopup {
                     width: 220px;
-                    height: 60px;
                     position: absolute;
                     box-sizing: border-box;
                     padding: 20px;
@@ -52,22 +51,31 @@ export class StatusPopup {
         `
     }
 
+    private addListeners() {
+        let element = document.querySelector('#ui-statuspopup')
+        let close = element.querySelector('.close')
+        close.addEventListener('click', e => {
+            this.closePopup()
+        }, false)
+    }
+
     private closePopup() {
         let element = document.querySelector('#ui-statuspopup')
         let statusSpan = element.querySelector('.status')
         statusSpan.textContent = ''
-        element.classList.remove('.active')
+        element.classList.remove('active')
     }
 
-    public showSttus() {
+    public showStatus(id) {
         let element = document.querySelector('#ui-statuspopup')
         let statusSpan = element.querySelector('.status')
-        statusSpan.textContent = 'status online'
-        element.classList.add('.active')
+        statusSpan.textContent = `this server: ${id} is currently online`
+        element.classList.add('active')
     }
 
     public createElement() {
         let element = document.createRange().createContextualFragment(this.render())
         this.container.appendChild(element)
+        this.addListeners()
     }
 }
