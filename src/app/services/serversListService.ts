@@ -10,13 +10,18 @@ interface ServersList {
     serversList: object
 }
 
-export default class ServerService implements ServersList {
+export class ServersListService implements ServersList {
     private data: any[]
+
     constructor (data: any) {
         this.data = data
     }
 
-    private calculateUptime = (date: string | number) => {
+    static create(data) {
+        return new ServersListService(data)
+    }
+
+    private calculateUptime = (date: any) => {
         let today: any = new Date()
         let bootday: any = new Date(date)
         return `${Math.round((today - bootday) / (1000*60*60*24))} days`
@@ -24,7 +29,7 @@ export default class ServerService implements ServersList {
 
     private createServer (serverObject): ServerModel {
 
-        let server: ServerModel = {
+        let server = {
             id: serverObject.id,
             serverName: serverObject.serverName,
             serverGroup: serverObject.serverGroup,
